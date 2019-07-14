@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MetaCoin | Truffle Webpack Demo w/ Frontend</title>
+    <title>TicTacToe on the Blockchain</title>
   </head>
   <style>
     input {
@@ -10,28 +10,34 @@
     }
   </style>
   <body>
-    <h1>MetaCoin — Example Truffle Dapp</h1>
-    <p>You have <strong class="balance">loading...</strong> META</p>
+    <h1>TicTacToe</h1>
+   
 
-    <h1>Send MetaCoin</h1>
+    <h2>Distributed TicTacToe Game on the Blockchain</h2>
 
-    <label for="amount">Amount:</label>
-    <input type="text" id="amount" placeholder="e.g. 95" />
+    <table id="board">
+       <tbody>
+       <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+       </tr>
+       <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+       </tbody>
+    </table>
 
-    <label for="receiver">To address:</label>
-    <input
-      type="text"
-      id="receiver"
-      placeholder="e.g. 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"
-    />
-
-    <button onclick="App.sendCoin()">Send MetaCoin</button>
-
-    <p id="status"></p>
-    <p>
-      <strong>Hint:</strong> open the browser developer console to view any
-      errors and warnings.
-    </p>
+   <br><br><button id="send" onclick="App.createNewGame()">Create Game</button>
+   <br><br><button id="send" onclick="App.joinGame()">Join Game</button> 
+   <br><br>
     <script src="index.js"></script>
   </body>
 </html>
