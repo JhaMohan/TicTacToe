@@ -7,15 +7,22 @@
   <style>
     input {
       display: block;
-      margin-bottom: 12px;
+      margin-bottom: 7px;
     }
+   #board {
+      height: 300px;
+      width: 300px;
+   }
+
+   #board td {
+     border: 1px solid;
+   }
+
   </style>
-  <body>
+  <body align="center">
+    <center>
     <h1>TicTacToe</h1>
-   
-
-    <h2>Distributed TicTacToe Game on the Blockchain</h2>
-
+    <h2 style="color:lightgrey;">Distributed TicTacToe Game on the Blockchain</h2>
     <table id="board">
        <tbody>
        <tr>
@@ -38,7 +45,8 @@
 
    <br><br><button id="create" onclick="App.createNewGame()">Create Game</button>
    <br><br><button id="join" onclick="App.joinGame()">Join Game</button> 
+   <br><br><button onclick="App.useAccountOne()">Use Account #2</button>
    <br><br>
-    
+    </center>
   </body>
 </html>

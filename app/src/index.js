@@ -1,44 +1,83 @@
 import Web3 from "web3";
+import { default as contract } from 'truffle-contract'
 import ticTacToeArtifact from "../../build/contracts/TicTacToe.json";
+import $ from "jquery";
 
-const App = {
-  web3: null,
-  account: null,
-  meta: null,
+   
+  let TicTacToe = contract(ticTacToeArtifact);
 
+let App = {
+ web3: null,
+ account: null,
+ accounts:null,
+  ticTacToeInstance:null,
+
+  
+  
   start: async function() {
-    const { web3 } = this;
+ //   const { web3 } = this;
 
-    try {
+  
+    try { 
       // get contract instance
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = ticTacToeArtifact.networks[networkId];
-      this.meta = new web3.eth.Contract(
-        ticTacToeArtifact.abi,
-        deployedNetwork.address,
-      );
-
-      // get accounts
-      const accounts = await web3.eth.getAccounts();
-      this.account = accounts[0];
-
-      //this.refreshBalance();
+     App.accounts = await App.web3.eth.getAccounts();
+     App.account = App.accounts[0];
+    // App.account1= App.accounts[1];
+     TicTacToe.setProvider(App.web3.currentProvider);
+     
     } catch (error) {
       console.error("Could not connect to contract or chain.");
     }
   },
 
-  createNewGame: () =>{
-    this.meta.new({from:account, value:web3.util.toWei(new web3.util.BN(1),"ether")}).then(instance=>{
-      console.log(instance);
+  useAccountOne: ()=>{
+    App.account=App.accounts[1];
+  },
+
+  
+  createNewGame: async () =>{
+    TicTacToe.new({from:App.account, value: App.web3.utils.toWei(new App.web3.utils.BN(1),"ether")}).then(instance=>{
+      App.ticTacToeInstance=instance;
+
+       for(let i=0;i<3;i++){
+         for(let j=0;j<3;j++) {
+           console.log($("#board")[0].children[0].children[i].children[j]);
+           $($("#board")[0].children[0].children[i].children[j]).off('click').click({x:i,y:j},App.setStone);
+         }
+       }
+      console.log(App.ticTacToeInstance);
     }).catch(err=>{
       console.error(err);
     })
   },
 
-  joinGame: ()=>{
-    console.log("Join Game called");
-  }
+  joinGame: async ()=>{
+     let gameAddress= prompt("Address of the game");
+     if(gameAddress!=null) {
+       TicTacToe.at(gameAddress).then(instance=>{
+         App.ticTacToeInstance=instance;
+           
+        return App.ticTacToeInstance.joinTheGame({from:App.account,value:App.web3.utils.toWei(new App.web3.utils.BN(1),"ether")})
+
+       }).then(txResult => {
+
+       for(let i=0;i<3;i++){
+        for(let j=0;j<3;j++) {
+          console.log($("#board")[0].children[0].children[i].children[j]);
+          $($("#board")[0].children[0].children[i].children[j]).off('click').click({x:i,y:j},App.setStone);
+        }
+      }
+         console.log(txResult);
+       })
+     }
+  },
+  setStone:(event)=>{
+    console.log(event);
+    App.ticTacToeInstance.setStone(event.data.x,event.data.y,{from:App.account}).then(txResult=>{
+      console.log(txResult);
+    })
+
+  },
 
 
 
@@ -57,7 +96,7 @@ window.addEventListener("load", function() {
     );
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     App.web3 = new Web3(
-      new Web3.providers.HttpProvider("http://127.0.0.1:8545"),
+      new Web3.providers.HttpProvider("http://127.0.0.1:9545"),
     );
   }
 
