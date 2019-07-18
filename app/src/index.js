@@ -39,12 +39,28 @@ let App = {
     TicTacToe.new({from:App.account, value: App.web3.utils.toWei(new App.web3.utils.BN(1),"ether")}).then(instance=>{
       App.ticTacToeInstance=instance;
 
-       for(let i=0;i<3;i++){
-         for(let j=0;j<3;j++) {
-           console.log($("#board")[0].children[0].children[i].children[j]);
-           $($("#board")[0].children[0].children[i].children[j]).off('click').click({x:i,y:j},App.setStone);
-         }
-       }
+    
+       let PlayerJoinedEvent =  App.ticTacToeInstance.PlayerJoined();
+
+        App.ticTacToeInstance.events.PlayerJoinedEvent({},(err,eventObj)=>{
+              console.log(eventObj)}).on('data',(event)=>{
+              if(!err) {
+                console.log(eventObj);
+                for(let i=0;i<3;i++){
+                  for(let j=0;j<3;j++) {
+                   // console.log($("#board")[0].children[0].children[i].children[j]);
+                    $($("#board")[0].children[0].children[i].children[j]).off('click').click({x:i,y:j},App.setStone);
+                  }
+                }
+              }else {
+                console.log(err);
+
+              }
+        }).on('error', console.error);
+
+
+
+       
       console.log(App.ticTacToeInstance);
     }).catch(err=>{
       console.error(err);
@@ -63,7 +79,7 @@ let App = {
 
        for(let i=0;i<3;i++){
         for(let j=0;j<3;j++) {
-          console.log($("#board")[0].children[0].children[i].children[j]);
+         // console.log($("#board")[0].children[0].children[i].children[j]);
           $($("#board")[0].children[0].children[i].children[j]).off('click').click({x:i,y:j},App.setStone);
         }
       }
@@ -75,9 +91,29 @@ let App = {
     console.log(event);
     App.ticTacToeInstance.setStone(event.data.x,event.data.y,{from:App.account}).then(txResult=>{
       console.log(txResult);
+      App.printBoard();
     })
 
   },
+
+  printBoard: ()=>{
+      App.ticTacToeInstance.getBoard.call().then(board=>{
+          //console.log(board);
+        for(let i=0;i<board.length;i++){
+          for(let j=0;j<board.length;j++){
+             if(board[i][j]==App.account) {
+              $("#board")[0].children[0].children[i].children[j].innerHTML="X";
+             }else if(board[i][j]!=0) {
+              $("#board")[0].children[0].children[i].children[j].innerHTML="O";
+             }
+          }
+        }
+
+
+
+      });
+
+  }
 
 
 
