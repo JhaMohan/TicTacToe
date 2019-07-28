@@ -17,7 +17,7 @@ contract TicTacToe {
     
     address[3][3] board;
     
-    address payable public  player1;
+    address payable public player1;
     address payable public player2;
     
     uint balanceToDrawPlayer1;
@@ -48,7 +48,8 @@ contract TicTacToe {
         gameActive=true;
          GameValidUntil = now + TimeToReact;
         player2=msg.sender;
-        emit PlayerJoined(activePlayer);
+        
+        emit PlayerJoined(player2);
         
         if(block.number%2==0) {
             activePlayer=player2;

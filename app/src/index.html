@@ -2,28 +2,38 @@
 <html>
   <head>
     <title>TicTacToe on the Blockchain</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="index.js"></script>
   </head>
   <style>
-    input {
-      display: block;
-      margin-bottom: 7px;
-    }
+  
    #board {
       height: 300px;
       width: 300px;
+      margin: auto;
    }
 
    #board td {
      border: 1px solid;
    }
 
+   .in-game {
+     display: none;
+   }
+
   </style>
-  <body align="center">
-    <center>
+  <body>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+    
     <h1>TicTacToe</h1>
-    <h2 style="color:lightgrey;">Distributed TicTacToe Game on the Blockchain</h2>
-    <table id="board">
+    <h2 style="color:lightgrey">Distributed TicTacToe Game on the Blockchain</h2>
+    <div class="in-game waiting-for-join" id="waiting">Waiting for Opponent!</div>
+    <div class="in-game waiting-for-join" id="your-turn">Your Turn</div>
+
+    <table id="board" class="in-game waiting-for-join">
        <tbody>
        <tr>
          <td></td>
@@ -42,11 +52,22 @@
       </tr>
        </tbody>
     </table>
+   <div class="game-start">
+   <br><br><button id="create" onclick="App.createNewGame()" class="btn btn-primary">Create Game</button> -or- <button id="join" onclick="App.joinGame()" class="btn btn-default" style="background-color:lightgrey">Join Game</button> 
+   <br />
+   One Game Costs: 1 Ether<br/>
+   </div>
 
-   <br><br><button id="create" onclick="App.createNewGame()">Create Game</button>
-   <br><br><button id="join" onclick="App.joinGame()">Join Game</button> 
-   <br><br><button onclick="App.useAccountOne()">Use Account #2</button>
+   <div class="in-game">
+    Game-Address:<span id="game-address"></span><br />
+    <div class="waiting-for-join">Opponent-Address:<span id="opponent-address"></span></div>
+   </div>
+   <hr /><button class="btn btn-5m" onclick="App.useAccountOne()" style="background-color:lightgrey">Use Account #2</button>
+
    <br><br>
-    </center>
+   </div>
+   </div>
+  </div>
+  
   </body>
 </html>
