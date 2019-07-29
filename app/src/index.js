@@ -14,6 +14,7 @@ let App = {
   nextPlayerEvent:null,
   gameOverWithWinEvent:null,
   gameOverWithDrawEvent:null,
+  arrEventsFired:null,
 
 
   
@@ -34,7 +35,8 @@ let App = {
      App.account = App.accounts[0];
     // App.account1= App.accounts[1];
      TicTacToe.setProvider(App.web3.currentProvider);
-     
+     App.arrEventsFired=[];
+
     } catch (error) {
       console.error("Could not connect to contract or chain.");
     }
@@ -126,7 +128,7 @@ let App = {
 
  
   nextPlayer :(eventObj)=>{
-    console.log('////////////////');
+    if(App.arrEventsFired.indexOf(eventObj.blockNumber)==-1){
     console.log(eventObj);
     App.printBoard();
     if(eventObj.args.player==App.account){
@@ -148,6 +150,7 @@ let App = {
       $("#waiting").show();
       $("#your-turn").hide();
     }
+  }
   }, 
 
 
