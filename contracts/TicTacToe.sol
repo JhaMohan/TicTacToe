@@ -48,7 +48,6 @@ contract TicTacToe {
         gameActive=true;
          GameValidUntil = now + TimeToReact;
         player2=msg.sender;
-        
         emit PlayerJoined(player2);
         
         if(block.number%2==0) {

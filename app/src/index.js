@@ -40,8 +40,9 @@ let App = {
     }
   },
 
-  useAccountOne: async ()=>{
-    App.account= await App.accounts[1];
+  useAccountOne: ()=>{
+    App.account= App.accounts[1];
+    console.log(App.account);
   },
 
   
@@ -54,7 +55,7 @@ let App = {
      $(".waiting-for-join").hide();
      $(".game-start").hide();
      $("#game-address").text(instance.address);
-     $("#waiting").show();
+     $("#waiting").show();     
 
 
       //console.log(instance);
@@ -62,8 +63,11 @@ let App = {
        
        playerJoinedEvent.on("data",(eventObj)=>{
         $(".waiting-for-join").show();
-        $("#opponent-address").text(eventObj.args.player);
-               console.log(eventObj);
+        
+        App.ticTacToeInstance.player2.call().then(player2address=>{
+          $("#opponent-address").text(player2address);
+        })
+          console.log(eventObj);
          }).on("error",console.log);
 
          App.eventListing();
@@ -80,12 +84,16 @@ let App = {
      if(gameAddress!=null) {
        TicTacToe.at(gameAddress).then(instance=>{
          App.ticTacToeInstance=instance;
-
-         
+         $(".in-game").show();
+         $(".waiting-for-join").show();
+         $(".game-start").hide();
+         $("#game-address").text(instance.address);
+         App.ticTacToeInstance.player1.call().then(player1address=>{
+          $("#opponent-address").text(player1address);
+        })
          App.eventListing();
-
-
-           
+         
+           //console.log(App.account);
         return App.ticTacToeInstance.joinTheGame({from:App.account,value:App.web3.utils.toWei(new App.web3.utils.BN(1),"ether")})
 
        }).then(txResult => {
@@ -123,7 +131,10 @@ let App = {
     App.printBoard();
     if(eventObj.args.player==App.account){
       //my turn
-    
+      
+      $("#waiting").hide();
+      $("#your-turn").show();
+
       for(let i=0;i<3;i++){
         for(let j=0;j<3;j++) {
          // console.log($("#board")[0].children[0].children[i].children[j]);
@@ -134,7 +145,8 @@ let App = {
       }
     }else {
       //opponent turn
-      
+      $("#waiting").show();
+      $("#your-turn").hide();
     }
   }, 
 
@@ -155,10 +167,7 @@ let App = {
     }
 
 
-    App.nextPlayerEvent.stopWatching();
-    App.gameOverWithWinEvent.stopWatching();
-    App.gameOverWithDrawEvent.stopWatching();
-  
+    
 
     for(let i=0;i<3;i++){
       for(let j=0;j<3;j++) {
@@ -166,6 +175,10 @@ let App = {
        $("#board")[0].children[0].children[i].children[j].innerHTML = "";
        }
       }
+
+
+    $(".in-game").hide();
+    $(".game-start").show();
 
 
  },
